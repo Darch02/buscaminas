@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,15 +18,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.buscaminas.R
 import com.example.buscaminas.ui.theme.BuscaminasTheme
+import com.example.buscaminas.screens.Boton1
 
 @Composable
-fun OnBoarding(
+fun Home(
     modifier: Modifier = Modifier,
 ){
     Scaffold(
         modifier = modifier
     ){
-        innerPadding ->
+            innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding).fillMaxSize().background(MaterialTheme.colorScheme.primaryContainer),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -43,6 +43,10 @@ fun OnBoarding(
                 modifier.padding(innerPadding),
                 style = MaterialTheme.typography.titleLarge
             )
+            Boton1(
+                modifier = modifier,
+                botonText = "Jugar"
+            )
         }
 
 
@@ -51,10 +55,8 @@ fun OnBoarding(
 
 @Preview(showBackground = true)
 @Composable
-fun OnboaringPreview() {
+fun HomePreview() {
     BuscaminasTheme(dynamicColor = false) {
-       OnBoarding(modifier = Modifier)
+        Home(modifier = Modifier)
     }
 }
-
-
