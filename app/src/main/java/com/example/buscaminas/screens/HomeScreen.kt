@@ -31,7 +31,6 @@ fun Home(
         Column(
             modifier = Modifier.padding(innerPadding).fillMaxSize().background(MaterialTheme.colorScheme.primaryContainer),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
         ){
             Image(
                 painter = painterResource(R.drawable.logo),
@@ -40,12 +39,24 @@ fun Home(
             )
             Text(
                 text = "BUSCAMINAS",
-                modifier.padding(innerPadding),
+                modifier.padding(innerPadding).padding(bottom = 50.dp),
                 style = MaterialTheme.typography.titleLarge
             )
             Boton1(
-                modifier = modifier,
+                modifier = modifier.padding(bottom = 20.dp),
                 botonText = "Jugar"
+            )
+            Boton1(
+                modifier = modifier.padding(bottom = 20.dp),
+                botonText = "Estadísticas"
+            )
+            Boton1(
+                modifier = modifier.padding(bottom = 20.dp),
+                botonText = "Créditos"
+            )
+            Boton1(
+                modifier = modifier.padding(bottom = 10.dp),
+                botonText = "salir"
             )
         }
 
