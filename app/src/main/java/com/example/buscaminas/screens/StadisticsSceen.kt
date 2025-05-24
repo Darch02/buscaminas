@@ -2,11 +2,12 @@ package com.example.buscaminas.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,10 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.buscaminas.R
 import com.example.buscaminas.ui.theme.BuscaminasTheme
-import com.example.buscaminas.screens.Boton1
 
 @Composable
-fun Home(
+fun Statistics(
     modifier: Modifier = Modifier,
     navController: NavController? = null
 ){
@@ -40,29 +40,45 @@ fun Home(
                 modifier.padding(innerPadding).size(150.dp)
             )
             Text(
-                text = "BUSCAMINAS",
+                text = "Estadísticas",
                 modifier.padding(innerPadding).padding(bottom = 50.dp),
                 style = MaterialTheme.typography.titleLarge
             )
-            Boton1(
-                modifier = modifier.padding(bottom = 30.dp),
-                botonText = "Jugar",
-                onClick = { navController?.navigate("DifficultyScreen") }
+            DataContainer(
+                levelName = "Fácil",
+                matches = "18",
+                wins = "10",
+                record = "1:00",
+                modifier = Modifier.width(300.dp)
+
             )
-            Boton1(
-                modifier = modifier.padding(bottom = 30.dp),
-                botonText = "Estadísticas",
-                onClick = { navController?.navigate("StatisticsScreen") }
+            DataContainer(
+                levelName = "Medio",
+                matches = "18",
+                wins = "10",
+                record = "1:00",
+                modifier = Modifier.width(300.dp)
+
             )
-            Boton1(
-                modifier = modifier.padding(bottom = 30.dp),
-                botonText = "Créditos",
-                onClick = { navController?.navigate("CreditsScreen") }
+            DataContainer(
+                levelName = "Difícil",
+                matches = "18",
+                wins = "10",
+                record = "1:00",
+                modifier = Modifier.width(300.dp)
+
             )
+
+            Spacer(modifier = Modifier.weight(1f))
+
             Boton1(
-                modifier = modifier.padding(bottom = 10.dp),
-                botonText = "salir"
+                modifier = Modifier
+                    .padding(horizontal = 16.dp) // Padding horizontal para que no toque los bordes
+                    .padding(bottom = 30.dp),    // Padding para separarlo del borde inferior
+                botonText = "Volver",
+                onClick = { navController?.navigate("HomeScreen") }
             )
+
         }
 
 
@@ -71,8 +87,8 @@ fun Home(
 
 @Preview(showBackground = true)
 @Composable
-fun HomePreview() {
+fun StatisticsPreviews() {
     BuscaminasTheme(dynamicColor = false) {
-        Home(modifier = Modifier)
+        Statistics(modifier = Modifier)
     }
 }
