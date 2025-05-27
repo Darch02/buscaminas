@@ -43,14 +43,16 @@ fun Boton1(
 @Composable
 fun Boton2(
     levelName: String,
-    levelDescription: String
+    levelDescription: String,
+    onClick: () -> Unit = {}
 ) {
     Surface(
         modifier = Modifier
             .padding(8.dp), // Espacio alrededor del Surface
         shape = RoundedCornerShape(12.dp), // Aplica las esquinas redondeadas directamente al Surface
         color = MaterialTheme.colorScheme.inverseSurface,
-        tonalElevation = 4.dp, // Opcional: añade elevación para un efecto de sombra
+        tonalElevation = 4.dp, // Opcional: añade elevación para un efecto de sombra,
+        onClick = { onClick() }
     ) {
         Box(
             modifier = Modifier

@@ -45,15 +45,18 @@ fun Difficulty(
             )
             Boton2(
                 levelName = "Fácil",
-                levelDescription = "9x9 - 10 minas"
+                levelDescription = "9x9 - 10 minas",
+                onClick = { navController?.navigate("GameScreen/Fácil") }
             )
             Boton2(
                 levelName = "Medio",
-                levelDescription = "9x15 - 17 minas"
+                levelDescription = "9x15 - 17 minas",
+                onClick = { navController?.navigate("GameScreen/Medio") }
             )
             Boton2(
                 levelName = "Difícil",
-                levelDescription = "10x20 - 25 minas"
+                levelDescription = "10x20 - 25 minas",
+                onClick = { navController?.navigate("GameScreen/Difícil") }
             )
 
             Spacer(modifier = Modifier.weight(1f))
