@@ -186,8 +186,8 @@ enum class NivelDificultad(
     val nombre: String
 ) {
     FACIL(9, 9, 10, "Fácil"),
-    MEDIO(16, 16, 40, "Medio"),
-    DIFICIL(24, 24, 99, "Difícil");
+    MEDIO(15, 9, 17, "Medio"),
+    DIFICIL(20, 10, 25, "Difícil");
 
     companion object {
         fun fromString(nombre: String): NivelDificultad {

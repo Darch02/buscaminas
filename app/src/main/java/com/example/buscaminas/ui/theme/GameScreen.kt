@@ -107,7 +107,7 @@ fun GameInfoBar(
             text = String.format("%03d", gameState.minasRestantes),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            color = Color.Red
+            color = Color.Black
         )
 
         // Timer (simplificado - podrías implementar un timer real)
@@ -115,7 +115,7 @@ fun GameInfoBar(
             text = String.format("%03d", gameState.tiempoTranscurrido),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            color = Color.Red
+            color = Color.Black
         )
     }
 }
@@ -130,9 +130,6 @@ fun GameBoard(
 ) {
     val filas = tablero.size
     val columnas = if (filas > 0) tablero[0].size else 0
-
-    // Añade un log aquí para verificar las dimensiones que recibe GameBoard
-    Log.d("GameBoard", "GameBoard recibe tablero: Filas=$filas, Columnas=$columnas")
 
     if (filas == 0 || columnas == 0) {
         Text("Error: Tablero con dimensiones cero", color = Color.Red)
@@ -216,7 +213,7 @@ fun CeldaView(
                 Icon(
                     painter = painterResource(id = R.drawable.flag),
                     contentDescription = "Bandera",
-                    tint = Color.Red,
+                    tint = Color.Black,
                     // Usa el nuevo modificador de tamaño
                     modifier = iconSizeModifier
                 )
