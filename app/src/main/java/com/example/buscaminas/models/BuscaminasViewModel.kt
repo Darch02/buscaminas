@@ -4,8 +4,8 @@ package com.example.buscaminas.models
 // VIEWMODEL PARA MANEJAR EL ESTADO DEL JUEGO
 // =============================================================================
 
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -17,8 +17,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import android.media.MediaPlayer
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
+import com.example.buscaminas.R
 
-class BuscaminasViewModel : ViewModel() {
+class BuscaminasViewModel(application: Application) : AndroidViewModel(application) {
+    private val context = application.applicationContext
+    private var mediaPlayer: MediaPlayer? = null
 
     private var tableroJuego: TableroJuego? = null
     private var timerJob: Job? = null // Para controlar el Job del timer
@@ -28,6 +34,32 @@ class BuscaminasViewModel : ViewModel() {
 
     private val _tablero = MutableStateFlow<Array<Array<Celda>>?>(null)
     val tablero: StateFlow<Array<Array<Celda>>?> = _tablero.asStateFlow()
+
+    private val _minasParaAnimar = MutableStateFlow<List<Pair<Int, Int>>>(emptyList())
+    val minasParaAnimar: StateFlow<List<Pair<Int, Int>>> = _minasParaAnimar.asStateFlow()
+
+    private val _indiceMinaAnimandose = MutableStateFlow(-1)
+    val indiceMinaAnimandose: StateFlow<Int> = _indiceMinaAnimandose.asStateFlow()
+
+    init {
+        // Puedes inicializar el MediaPlayer aquí o cuando vayas a reproducirlo por primera vez
+        // Inicializarlo aquí puede precargarlo para una respuesta más rápida.
+        mediaPlayer = MediaPlayer.create(context, R.raw.explosion_sound) // Reemplaza con tu nombre de archivo
+        mediaPlayer?.setOnCompletionListener { mp ->
+            mp.release() // Libera el MediaPlayer cuando el sonido termine
+            mediaPlayer = null // Permite que se cree uno nuevo si es necesario
+        }
+    }
+
+    // Función para reproducir el sonido
+    private fun playExplosionSound() {
+        // Si ya hay un MediaPlayer, lo reseteamos o creamos uno nuevo.
+        // Para explosiones consecutivas, es mejor crear uno nuevo cada vez
+        // o usar SoundPool si son muchos sonidos cortos y rápidos.
+        // Para una explosión única, esto está bien:
+        mediaPlayer?.seekTo(0) // Reinicia el sonido al principio si ya está en uso
+        mediaPlayer?.start()
+    }
 
     fun iniciarJuego(nivel: NivelDificultad) {
         stopTimer()
@@ -62,9 +94,30 @@ class BuscaminasViewModel : ViewModel() {
             stopTimer()
             _gameState.value = _gameState.value.copy(
                 juegoTerminado = true,
-                juegoGanado = false
+                juegoGanado = false,
+                animacionGameOverActiva = true
             )
             _tablero.value = tableroJuego?.obtenerTablero()?.deepCopy()
+
+            // Obtener la lista de coordenadas de las minas
+            val minas = mutableListOf<Pair<Int, Int>>()
+            tableroJuego?.obtenerTablero()?.forEachIndexed { fila, row ->
+                row.forEachIndexed { columna, celda ->
+                    if (celda.tieneMina) {
+                        minas.add(Pair(fila, columna))
+                    }
+                }
+            }
+            _minasParaAnimar.value = minas
+
+            // Iniciar la secuencia de animación
+            viewModelScope.launch {
+                _minasParaAnimar.value.forEachIndexed { index, _ ->
+                    delay(250) // Retraso entre explosiones
+                    _indiceMinaAnimandose.value = index
+                    playExplosionSound()
+                }
+            }
         }
 
         tablero.onGameWon = {
@@ -160,6 +213,8 @@ class BuscaminasViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         stopTimer() // Asegúrate de detener el timer cuando el ViewModel se destruye
+        mediaPlayer?.release() // Libera el MediaPlayer cuando el ViewModel se destruye
+        mediaPlayer = null
     }
 }
 
@@ -176,7 +231,8 @@ data class GameUiState(
     val minasRestantes: Int = 0,
     val celdasDestapadas: Int = 0,
     val tiempoTranscurrido: Long = 0L, // Para un futuro timer, si lo implementas
-    val modoColocarBanderas: Boolean = false // <-- ¡Nueva propiedad!
+    val modoColocarBanderas: Boolean = false, // <-- ¡Nueva propiedad!
+    val animacionGameOverActiva: Boolean = false
 )
 
 enum class NivelDificultad(

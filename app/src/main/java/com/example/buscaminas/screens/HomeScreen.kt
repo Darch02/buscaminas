@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,47 +26,51 @@ import com.example.buscaminas.screens.Boton1
 fun Home(
     modifier: Modifier = Modifier,
     navController: NavController? = null
-){
+) {
     Scaffold(
-        modifier = modifier
-    ){
-            innerPadding ->
+        modifier = modifier.fillMaxSize() // Asegúrate de que el Scaffold también llene el tamaño
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding).fillMaxSize().background(MaterialTheme.colorScheme.primaryContainer),
+            // Aplica el innerPadding SOLO AQUÍ, al contenedor principal de tu contenido
+            modifier = Modifier
+                .padding(innerPadding) // Este padding es del Scaffold
+                .fillMaxSize() // La columna llena el espacio restante
+                .background(MaterialTheme.colorScheme.primaryContainer), // Fondo de la columna
             horizontalAlignment = Alignment.CenterHorizontally,
-        ){
+            verticalArrangement = Arrangement.Center // Centra el contenido verticalmente si quieres
+        ) {
             Image(
                 painter = painterResource(R.drawable.logo),
                 contentDescription = null,
-                modifier.padding(innerPadding).size(150.dp)
+                modifier = Modifier
+                    .size(150.dp) // Tamaño de la imagen
+                    .padding(bottom = 30.dp) // Padding solo para la imagen, no para el Scaffold
             )
             Text(
                 text = "BUSCAMINAS",
-                modifier.padding(innerPadding).padding(bottom = 50.dp),
+                modifier = Modifier.padding(bottom = 50.dp), // Padding solo para el texto
                 style = MaterialTheme.typography.titleLarge
             )
             Boton1(
-                modifier = modifier.padding(bottom = 30.dp),
+                modifier = Modifier.padding(bottom = 30.dp),
                 botonText = "Jugar",
                 onClick = { navController?.navigate("DifficultyScreen") }
             )
             Boton1(
-                modifier = modifier.padding(bottom = 30.dp),
+                modifier = Modifier.padding(bottom = 30.dp),
                 botonText = "Estadísticas",
                 onClick = { navController?.navigate("StatisticsScreen") }
             )
             Boton1(
-                modifier = modifier.padding(bottom = 30.dp),
+                modifier = Modifier.padding(bottom = 30.dp),
                 botonText = "Créditos",
                 onClick = { navController?.navigate("CreditsScreen") }
             )
             Boton1(
-                modifier = modifier.padding(bottom = 10.dp),
-                botonText = "salir"
+                modifier = Modifier.padding(bottom = 10.dp),
+                botonText = "salir" // Considera cómo manejarás el salir (ej. (context as Activity).finish())
             )
         }
-
-
     }
 }
 

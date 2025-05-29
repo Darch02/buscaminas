@@ -20,18 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.buscaminas.R
 import com.example.buscaminas.models.*
 import com.example.buscaminas.models.Celda
-import com.example.buscaminas.screens.Home
+import com.example.buscaminas.screens.ExplosionAnimation
 
 @Composable
 fun BuscaminasGameScreen(
@@ -79,7 +79,8 @@ fun BuscaminasGameScreen(
                     },
                     onCellLongClick = { fila, columna ->
                         viewModel.alternarBandera(fila, columna)
-                    }
+                    },
+                    viewModel = viewModel
                 )
             }
         }
@@ -126,7 +127,8 @@ fun GameBoard(
     tablero: Array<Array<Celda>>,
     gameState: GameUiState,
     onCellClick: (Int, Int) -> Unit,
-    onCellLongClick: (Int, Int) -> Unit
+    onCellLongClick: (Int, Int) -> Unit,
+    viewModel: BuscaminasViewModel
 ) {
     val filas = tablero.size
     val columnas = if (filas > 0) tablero[0].size else 0
@@ -151,12 +153,19 @@ fun GameBoard(
             val fila = index / columnas
             val columna = index % columnas
             val celda = tablero[fila][columna]
+            val minasParaAnimar by viewModel.minasParaAnimar.collectAsState()
+            val indiceMinaAnimandose by viewModel.indiceMinaAnimandose.collectAsState()
 
             CeldaView(
                 celda = celda,
                 onClick = { onCellClick(fila, columna) },
                 onLongClick = { onCellLongClick(fila, columna) },
-                enabled = !gameState.juegoTerminado
+                enabled = !gameState.juegoTerminado,
+                animacionGameOverActiva = gameState.animacionGameOverActiva,
+                minasParaAnimar = minasParaAnimar,
+                indiceMinaAnimandose = indiceMinaAnimandose,
+                fila = fila,
+                columna = columna
             )
         }
     }
@@ -170,7 +179,12 @@ fun CeldaView(
     // REMUEVE 'size: androidx.compose.ui.unit.Dp,'
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    enabled: Boolean
+    enabled: Boolean,
+    animacionGameOverActiva: Boolean,
+    minasParaAnimar: List<Pair<Int, Int>>,
+    indiceMinaAnimandose: Int,
+    fila: Int,
+    columna: Int,
 ) {
     val backgroundColor = when {
         !celda.destapada -> Color(0xFFBDBDBD) // Gris para celdas sin destapar
@@ -207,7 +221,7 @@ fun CeldaView(
 
 
         val iconSizeModifier = Modifier.fillMaxSize(0.6f) // 60% del tamaño del Box
-
+        val esMinaAAnimar = minasParaAnimar.getOrNull(indiceMinaAnimandose) == Pair(fila, columna)
         when {
             celda.tieneBandera -> {
                 Icon(
@@ -220,11 +234,14 @@ fun CeldaView(
             }
 
             celda.destapada && celda.tieneMina -> {
-                Text(
-                    text = "💣",
-                    // Puedes usar fontSize directamente o calcularlo si es necesario
-                    fontSize = 24.sp // Ajusta este valor según la visualización deseada
-                )
+                if (animacionGameOverActiva && esMinaAAnimar) {
+                    ExplosionAnimation() // Muestra la animación si está activa y es una mina no destapada
+                } else {
+                    Text(
+                        text = "💣",
+                        fontSize = 24.sp
+                    )
+                }
             }
 
             celda.destapada && celda.minasAlrededor > 0 -> {
@@ -259,7 +276,8 @@ fun getNumberColor(numero: Int): Color {
 @Preview
 @Composable
 fun BuscaminasGameScreenPreview() {
+    val viewModel: BuscaminasViewModel = viewModel()
     BuscaminasTheme(dynamicColor = false) {
-        BuscaminasGameScreen(BuscaminasViewModel())
+        BuscaminasGameScreen(viewModel)
     }
 }

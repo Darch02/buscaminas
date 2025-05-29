@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
 import com.example.buscaminas.screens.Home
 import com.example.buscaminas.screens.*
 import androidx.compose.material3.Text
@@ -31,7 +32,8 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController, // 2. Pasa el NavController al NavHost
-                    startDestination = "HomeScreen", // 3. Define la pantalla inicial
+                    startDestination = "HomeScreen",
+                    modifier = Modifier.fillMaxSize() // 3. Define la pantalla inicial
                 ) {
                     composable("HomeScreen") {
                         Home(navController = navController) // 4. Pasa el NavController a HomeScreen
