@@ -18,11 +18,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import android.media.MediaPlayer
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import com.example.buscaminas.R
 
 class BuscaminasViewModel(application: Application) : AndroidViewModel(application) {
+    private val statistics = StatisticsData(application)
+
     private val context = application.applicationContext
     private var mediaPlayer: MediaPlayer? = null
 
@@ -113,10 +114,11 @@ class BuscaminasViewModel(application: Application) : AndroidViewModel(applicati
             // Iniciar la secuencia de animación
             viewModelScope.launch {
                 _minasParaAnimar.value.forEachIndexed { index, _ ->
+                    playExplosionSound()
                     delay(250) // Retraso entre explosiones
                     _indiceMinaAnimandose.value = index
-                    playExplosionSound()
                 }
+                statistics.addPartida(gameState.value.nivelActual.nombre)
             }
         }
 
@@ -127,6 +129,11 @@ class BuscaminasViewModel(application: Application) : AndroidViewModel(applicati
                 juegoGanado = true
             )
             _tablero.value = tableroJuego?.obtenerTablero()?.deepCopy()
+            viewModelScope.launch {
+                statistics.addPartida(gameState.value.nivelActual.nombre)
+                statistics.addVictoria(gameState.value.nivelActual.nombre)
+                statistics.addRecord(gameState.value.tiempoTranscurrido,gameState.value.nivelActual.nombre)
+            }
         }
 
         tablero.onCellRevealed = { celda ->

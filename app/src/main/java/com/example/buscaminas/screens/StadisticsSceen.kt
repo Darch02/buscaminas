@@ -12,6 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -19,13 +21,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.buscaminas.R
+import com.example.buscaminas.models.StatisticsData
 import com.example.buscaminas.ui.theme.BuscaminasTheme
 
 @Composable
 fun Statistics(
     modifier: Modifier = Modifier,
-    navController: NavController? = null
+    navController: NavController? = null,
+    statisticsData: StatisticsData
 ){
+    val partidas by statisticsData.partidas.collectAsState(initial = 0)
+    val victorias by statisticsData.victorias.collectAsState(initial = 0)
+    val record by statisticsData.record.collectAsState(initial = 0)
+
+    val partidas_medio by statisticsData.partidas_medio.collectAsState(initial = 0)
+    val victorias_medio by statisticsData.victorias_medio.collectAsState(initial = 0)
+    val record_medio by statisticsData.record_medio.collectAsState(initial = 0)
+
+    val partidas_dificil by statisticsData.partidas_dificil.collectAsState(initial = 0)
+    val victorias_dificil by statisticsData.victorias_dificil.collectAsState(initial = 0)
+    val record_dificil by statisticsData.record_dificil.collectAsState(initial = 0)
     Scaffold(
         modifier = modifier
     ){
@@ -37,34 +52,34 @@ fun Statistics(
             Image(
                 painter = painterResource(R.drawable.logo),
                 contentDescription = null,
-                modifier.padding(innerPadding).size(150.dp)
+                modifier.padding(bottom = 10.dp).size(150.dp)
             )
             Text(
                 text = "Estadísticas",
-                modifier.padding(innerPadding).padding(bottom = 50.dp),
+                modifier.padding(innerPadding).padding(bottom = 10.dp),
                 style = MaterialTheme.typography.titleLarge
             )
             DataContainer(
                 levelName = "Fácil",
-                matches = "18",
-                wins = "10",
-                record = "1:00",
+                matches = partidas.toString(),
+                wins = victorias.toString(),
+                record = record.toString(),
                 modifier = Modifier.width(300.dp)
 
             )
             DataContainer(
                 levelName = "Medio",
-                matches = "18",
-                wins = "10",
-                record = "1:00",
+                matches = partidas_medio.toString(),
+                wins = victorias_medio.toString(),
+                record = record_medio.toString(),
                 modifier = Modifier.width(300.dp)
 
             )
             DataContainer(
                 levelName = "Difícil",
-                matches = "18",
-                wins = "10",
-                record = "1:00",
+                matches = partidas_dificil.toString(),
+                wins = victorias_dificil.toString(),
+                record = record_dificil.toString(),
                 modifier = Modifier.width(300.dp)
 
             )
@@ -89,6 +104,6 @@ fun Statistics(
 @Composable
 fun StatisticsPreviews() {
     BuscaminasTheme(dynamicColor = false) {
-        Statistics(modifier = Modifier)
+        //Statistics(modifier = Modifier)
     }
 }
