@@ -28,65 +28,77 @@ fun Credits(
     navController: NavController? = null
 ){
     Scaffold(
-        modifier = modifier.fillMaxSize() // Asegúrate que el Scaffold ocupe toda la pantalla
+        modifier = modifier.fillMaxSize()
     ){ innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding) // Aplica el padding del Scaffold
-                .fillMaxSize()         // El Column también debe llenar el espacio
-                .background(MaterialTheme.colorScheme.primaryContainer),
+                .padding(innerPadding)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(horizontal = 24.dp), // Padding horizontal general
             horizontalAlignment = Alignment.CenterHorizontally,
         ){
             Text(
                 text = "Créditos",
-                modifier = Modifier.padding(bottom = 20.dp, top = 20.dp),
-                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(vertical = 32.dp),
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Image(
                 painter = painterResource(R.drawable.logo),
                 contentDescription = null,
-                modifier = Modifier.size(150.dp)
+                modifier = Modifier.size(120.dp)
             )
             Text(
                 text = "BUSCAMINAS",
-                modifier = Modifier.padding(bottom = 50.dp),
-                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(vertical = 32.dp),
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Text(
                 text = "Desarrollado por",
-                modifier = Modifier.padding(bottom = 20.dp),
-                style = MaterialTheme.typography.titleLarge.copy(fontSize = 32.sp),
+                modifier = Modifier.padding(bottom = 16.dp),
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Text(
-                text = "Juana Jaramillo Montoya - https://github.com/Darch02/",
-                modifier = Modifier.padding(bottom = 20.dp),
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp),
+                text = "Juana Jaramillo Montoya",
+                modifier = Modifier.padding(bottom = 8.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+            Text(
+                text = "https://github.com/Darch02/",
+                modifier = Modifier.padding(bottom = 24.dp),
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Text(
                 text = "Y",
-                modifier = Modifier.padding(bottom = 20.dp),
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp),
+                modifier = Modifier.padding(vertical = 16.dp),
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Text(
-                text = "Thomas Camilo Vanegas Acevedo - https://github.com/thomasvanegas",
-                modifier = Modifier.padding(bottom = 20.dp),
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp),
+                text = "Thomas Vanegas Acevedo",
+                modifier = Modifier.padding(bottom = 8.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+            Text(
+                text = "https://github.com/thomasvanegas",
+                modifier = Modifier.padding(bottom = 32.dp),
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
 
-            // Spacer para empujar el botón hacia abajo
             Spacer(modifier = Modifier.weight(1f))
 
             Boton1(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp) // Padding horizontal para que no toque los bordes
-                    .padding(bottom = 30.dp),    // Padding para separarlo del borde inferior
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 32.dp),
                 botonText = "Volver",
                 onClick = { navController?.navigate("HomeScreen") }
             )
