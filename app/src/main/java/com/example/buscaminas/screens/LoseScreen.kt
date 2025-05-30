@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.buscaminas.R
+import com.example.buscaminas.models.BuscaminasViewModel
 import com.example.buscaminas.models.GameStats
 import com.example.buscaminas.ui.theme.BuscaminasTheme
 
@@ -22,7 +23,7 @@ import com.example.buscaminas.ui.theme.BuscaminasTheme
 fun LoseScreen(
     gameStats: GameStats,
     navController: NavController? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -151,7 +152,7 @@ fun LoseScreen(
                 // Botón para intentar de nuevo
                 OutlinedButton(
                     onClick = {
-                        navController?.popBackStack()
+                        navController?.navigate("DifficultyScreen")
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -174,7 +175,7 @@ fun LoseScreen(
 @Composable
 fun LoseScreenPreview() {
     BuscaminasTheme {
-        LoseScreen(
+        /*LoseScreen(
             gameStats = GameStats(
                 celdasDestapadas = 15,
                 totalCeldas = 81,
@@ -183,6 +184,6 @@ fun LoseScreenPreview() {
                 juegoTerminado = true,
                 juegoGanado = false
             )
-        )
+        )*/
     }
 }

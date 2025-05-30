@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
                             navArgument("celdasDestapadas") { type = NavType.IntType },
                             navArgument("totalCeldas") { type = NavType.IntType },
                             navArgument("minasRestantes") { type = NavType.IntType },
-                            navArgument("totalMinas") { type = NavType.IntType }
+                            navArgument("totalMinas") { type = NavType.IntType },
                         )) {
                             val celdasDestapadas = it.arguments?.getInt("celdasDestapadas") ?: 0
                             val totalCeldas = it.arguments?.getInt("totalCeldas") ?: 0

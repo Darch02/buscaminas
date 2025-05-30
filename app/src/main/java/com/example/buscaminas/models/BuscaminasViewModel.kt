@@ -42,6 +42,7 @@ class BuscaminasViewModel(application: Application) : AndroidViewModel(applicati
     private val _indiceMinaAnimandose = MutableStateFlow(-1)
     val indiceMinaAnimandose: StateFlow<Int> = _indiceMinaAnimandose.asStateFlow()
 
+
     init {
         // Puedes inicializar el MediaPlayer aquí o cuando vayas a reproducirlo por primera vez
         // Inicializarlo aquí puede precargarlo para una respuesta más rápida.
@@ -64,7 +65,6 @@ class BuscaminasViewModel(application: Application) : AndroidViewModel(applicati
 
     fun iniciarJuego(nivel: NivelDificultad) {
         stopTimer()
-
         tableroJuego = TableroFactory.crearTablero(nivel).apply {
             configurarListeners(this)
         }
@@ -118,6 +118,9 @@ class BuscaminasViewModel(application: Application) : AndroidViewModel(applicati
                     delay(250) // Retraso entre explosiones
                     _indiceMinaAnimandose.value = index
                 }
+                _gameState.value = _gameState.value.copy(
+                    animacionGameOverActiva = false
+                )
                 statistics.addPartida(gameState.value.nivelActual.nombre)
             }
         }

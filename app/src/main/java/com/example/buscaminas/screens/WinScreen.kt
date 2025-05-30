@@ -150,7 +150,7 @@ fun WinScreen(
                 // Botón para jugar de nuevo
                 OutlinedButton(
                     onClick = {
-                        navController?.popBackStack()
+                        navController?.navigate("DifficultyScreen")
                     },
                     modifier = Modifier
                         .fillMaxWidth()

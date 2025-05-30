@@ -52,11 +52,16 @@ fun BuscaminasGameScreen(
         }
     }
 
-    LaunchedEffect(gameState.juegoTerminado) {
-        if (gameState.juegoTerminado && !gameState.juegoGanado) {
-            val stats = viewModel.obtenerGameStats()
-            stats?.let {
-                navController?.navigate("LoseScreen/${it.celdasDestapadas}/${it.totalCeldas}/${it.minasRestantes}/${it.totalMinas}")
+    LaunchedEffect(gameState.juegoTerminado, !gameState.animacionGameOverActiva) {
+        Log.e("BuscaminasGameScreen", "juegoTerminado: ${gameState.juegoTerminado}")
+        Log.e("BuscaminasGameScreen", "juegoGanado: ${gameState.juegoGanado}")
+        Log.e("BuscaminasGameScreen", "animacionGameOverActiva: ${gameState.animacionGameOverActiva}")
+        if (gameState.juegoTerminado && !gameState.juegoGanado ) {
+            if(!gameState.animacionGameOverActiva){
+                val stats = viewModel.obtenerGameStats()
+                stats?.let {
+                    navController?.navigate("LoseScreen/${it.celdasDestapadas}/${it.totalCeldas}/${it.minasRestantes}/${it.totalMinas}")
+                }
             }
         } else if (gameState.juegoTerminado && gameState.juegoGanado) {
             val stats = viewModel.obtenerGameStats()
@@ -252,9 +257,7 @@ fun CeldaView(
                 enabled = enabled,
                 onClick = onClick,
                 onLongClick = onLongClick
-            ) // Añade un log para ver si CeldaView se está componiendo
-            .onGloballyPositioned { coordinates ->
-                Log.d("CeldaView", "Celda (${celda.fila},${celda.columna}) tamaño: ${coordinates.size.width}x${coordinates.size.height}") },
+            ),
         contentAlignment = Alignment.Center
     ) {
 
