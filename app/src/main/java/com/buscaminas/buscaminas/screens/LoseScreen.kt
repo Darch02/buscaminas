@@ -150,7 +150,7 @@ fun LoseScreen(
                 // Botón para intentar de nuevo
                 OutlinedButton(
                     onClick = {
-                        navController?.popBackStack()
+                        navController?.navigate("DifficultyScreen")
                     },
                     modifier = Modifier
                         .fillMaxWidth()
