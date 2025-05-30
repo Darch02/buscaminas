@@ -28,15 +28,15 @@ fun Boton1(
         onClick = { onClick() },
         modifier = modifier,
         colors = outlinedButtonColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSurface
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ),
-        border = BorderStroke(3.dp,MaterialTheme.colorScheme.onSurface)
-
+        border = BorderStroke(3.dp, MaterialTheme.colorScheme.primary)
     ) {
         Text(
             text = botonText,
-            style = MaterialTheme.typography.labelSmall
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onPrimary
         )
     }
 }

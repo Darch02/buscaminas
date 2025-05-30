@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.buscaminas.models.BuscaminasViewModel
+import com.example.buscaminas.models.GameStats
 import com.example.buscaminas.models.NivelDificultad
 import com.example.buscaminas.models.StatisticsData
 import com.example.buscaminas.ui.theme.BuscaminasGameScreen
@@ -41,37 +42,66 @@ class MainActivity : ComponentActivity() {
 
                 // LaunchedEffect para manejar el tiempo de la Splash Screen
                 LaunchedEffect(key1 = true) { // key1 = true asegura que se ejecuta solo una vez
-                    delay(2500) // Muestra la Splash Screen durante 2 segundos (ajusta a tu gusto)
+                    delay(1000) // Muestra la Splash Screen durante 1 segundo (reducido de 2.5 segundos)
                     showSplashScreen = false // Desactiva la Splash Screen
                 }
 
-                NavHost(
-                    navController = navController, // 2. Pasa el NavController al NavHost
-                    startDestination = if (showSplashScreen) "splash_screen" else "HomeScreen", // Inicia en Splash o Home
-                    modifier = Modifier.fillMaxSize() // 3. Define la pantalla inicial
-                ) {
-                    composable("splash_screen") {
-                        OnBoarding()
-                    }
-                    composable("HomeScreen") {
-                        Home(navController = navController) // 4. Pasa el NavController a HomeScreen
-                    }
-                    composable("DifficultyScreen") {
-                        Difficulty(navController = navController) // 4. Pasa el NavController a DifficultyScreen
-                    }
-                    composable("CreditsScreen") {
-                        Credits(navController = navController) // 4. Pasa el NavController a DifficultyScreen
-                    }
-                    composable("StatisticsScreen") {
-                        val context = LocalContext.current
-                        val statistics = remember { StatisticsData(context) }
-                        Statistics(navController = navController, statisticsData = statistics) // 4. Pasa el NavController a DifficultyScreen
-                    }
-                    composable("GameScreen/{nivel}", arguments = listOf(navArgument("nivel") { type = NavType.StringType })) {
-                        val nivelString = it.arguments?.getString("nivel")
-                        val nivel = NivelDificultad.fromString(nivelString ?: "FACIL")
-                        val viewModel: BuscaminasViewModel = viewModel()
-                        BuscaminasGameScreen(navController = navController, viewModel = viewModel, nivel = nivel) // 4. Pasa el NavController a DifficultyScreen
+                if (showSplashScreen) {
+                    // Muestra la Splash Screen mientras showSplashScreen es true
+                    OnBoarding()
+                } else {
+                    // Una vez que la Splash Screen termina, muestra la navegación principal
+                    NavHost(
+                        navController = navController, // 2. Pasa el NavController al NavHost
+                        startDestination = "HomeScreen", // 3. Define la pantalla inicial después del splash
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        composable("HomeScreen") {
+                            Home(navController = navController) // 4. Pasa el NavController a HomeScreen
+                        }
+                        composable("DifficultyScreen") {
+                            Difficulty(navController = navController) // 4. Pasa el NavController a DifficultyScreen
+                        }
+                        composable("CreditsScreen") {
+                            Credits(navController = navController) // 4. Pasa el NavController a CreditsScreen
+                        }
+                        composable("StatisticsScreen") {
+                            val context = LocalContext.current
+                            val statistics = remember { StatisticsData(context) }
+                            Statistics(navController = navController, statisticsData = statistics) // 4. Pasa el NavController a StatisticsScreen
+                        }
+                        composable("GameScreen/{nivel}", arguments = listOf(navArgument("nivel") { type = NavType.StringType })) {
+                            val nivelString = it.arguments?.getString("nivel")
+                            val nivel = NivelDificultad.fromString(nivelString ?: "FACIL")
+                            val viewModel: BuscaminasViewModel = viewModel()
+                            BuscaminasGameScreen(navController = navController, viewModel = viewModel, nivel = nivel) // 4. Pasa el NavController a GameScreen
+                        }
+                        composable("LoseScreen/{celdasDestapadas}/{totalCeldas}/{minasRestantes}/{totalMinas}", arguments = listOf(
+                            navArgument("celdasDestapadas") { type = NavType.IntType },
+                            navArgument("totalCeldas") { type = NavType.IntType },
+                            navArgument("minasRestantes") { type = NavType.IntType },
+                            navArgument("totalMinas") { type = NavType.IntType }
+                        )) {
+                            val celdasDestapadas = it.arguments?.getInt("celdasDestapadas") ?: 0
+                            val totalCeldas = it.arguments?.getInt("totalCeldas") ?: 0
+                            val minasRestantes = it.arguments?.getInt("minasRestantes") ?: 0
+                            val totalMinas = it.arguments?.getInt("totalMinas") ?: 0
+                            val gameStats = GameStats(celdasDestapadas, totalCeldas, minasRestantes, totalMinas, true, false)
+                            LoseScreen(gameStats = gameStats, navController = navController)
+                        }
+                        composable("WinScreen/{celdasDestapadas}/{totalCeldas}/{minasRestantes}/{totalMinas}", arguments = listOf(
+                            navArgument("celdasDestapadas") { type = NavType.IntType },
+                            navArgument("totalCeldas") { type = NavType.IntType },
+                            navArgument("minasRestantes") { type = NavType.IntType },
+                            navArgument("totalMinas") { type = NavType.IntType }
+                        )) {
+                            val celdasDestapadas = it.arguments?.getInt("celdasDestapadas") ?: 0
+                            val totalCeldas = it.arguments?.getInt("totalCeldas") ?: 0
+                            val minasRestantes = it.arguments?.getInt("minasRestantes") ?: 0
+                            val totalMinas = it.arguments?.getInt("totalMinas") ?: 0
+                            val gameStats = GameStats(celdasDestapadas, totalCeldas, minasRestantes, totalMinas, true, true)
+                            WinScreen(gameStats = gameStats, navController = navController)
+                        }
                     }
                 }
             }

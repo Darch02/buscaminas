@@ -39,40 +39,45 @@ fun Credits(
         ){
             Text(
                 text = "Créditos",
-                // No necesitas modifier.padding(innerPadding) aquí de nuevo si el Column ya lo tiene
                 modifier = Modifier.padding(bottom = 20.dp, top = 20.dp),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Image(
                 painter = painterResource(R.drawable.logo),
                 contentDescription = null,
-                modifier = Modifier.size(150.dp) // Solo el modificador específico del Image
+                modifier = Modifier.size(150.dp)
             )
             Text(
                 text = "BUSCAMINAS",
                 modifier = Modifier.padding(bottom = 50.dp),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Text(
                 text = "Desarrollado por",
                 modifier = Modifier.padding(bottom = 20.dp),
-                style = MaterialTheme.typography.titleLarge.copy(fontSize = 32.sp)
+                style = MaterialTheme.typography.titleLarge.copy(fontSize = 32.sp),
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Text(
-                text = "Juana Jaramillo Montoya",
+                text = "Juana Jaramillo Montoya - https://github.com/Darch02/",
                 modifier = Modifier.padding(bottom = 20.dp),
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp)
+                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp),
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Text(
                 text = "Y",
                 modifier = Modifier.padding(bottom = 20.dp),
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp)
+                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp),
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Text(
-                text = "Thomas Camilo Vanegas Acevedo",
+                text = "Thomas Camilo Vanegas Acevedo - https://github.com/thomasvanegas",
                 modifier = Modifier.padding(bottom = 20.dp),
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
 
             // Spacer para empujar el botón hacia abajo

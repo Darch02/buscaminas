@@ -1,4 +1,4 @@
-# buscaminas
+# Buscaminas
 
 ## Descripción del Proyecto
 

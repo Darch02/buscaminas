@@ -2,25 +2,20 @@ package com.example.buscaminas.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.buscaminas.R
 import com.example.buscaminas.ui.theme.BuscaminasTheme
-import com.example.buscaminas.screens.Boton1
 
 @Composable
 fun Home(
@@ -28,48 +23,69 @@ fun Home(
     navController: NavController? = null
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize() // Asegúrate de que el Scaffold también llene el tamaño
+        modifier = modifier.fillMaxSize()
     ) { innerPadding ->
         Column(
-            // Aplica el innerPadding SOLO AQUÍ, al contenedor principal de tu contenido
             modifier = Modifier
-                .padding(innerPadding) // Este padding es del Scaffold
-                .fillMaxSize() // La columna llena el espacio restante
-                .background(MaterialTheme.colorScheme.primaryContainer), // Fondo de la columna
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(MaterialTheme.colorScheme.primaryContainer),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center // Centra el contenido verticalmente si quieres
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Spacer(modifier = Modifier.height(32.dp))
+            
             Image(
                 painter = painterResource(R.drawable.logo),
-                contentDescription = null,
+                contentDescription = "Logo Buscaminas",
                 modifier = Modifier
-                    .size(150.dp) // Tamaño de la imagen
-                    .padding(bottom = 30.dp) // Padding solo para la imagen, no para el Scaffold
+                    .size(150.dp)
+                    .padding(bottom = 16.dp)
             )
+            
             Text(
                 text = "BUSCAMINAS",
-                modifier = Modifier.padding(bottom = 50.dp), // Padding solo para el texto
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.padding(bottom = 32.dp)
             )
-            Boton1(
-                modifier = Modifier.padding(bottom = 30.dp),
-                botonText = "Jugar",
-                onClick = { navController?.navigate("DifficultyScreen") }
-            )
-            Boton1(
-                modifier = Modifier.padding(bottom = 30.dp),
-                botonText = "Estadísticas",
-                onClick = { navController?.navigate("StatisticsScreen") }
-            )
-            Boton1(
-                modifier = Modifier.padding(bottom = 30.dp),
-                botonText = "Créditos",
-                onClick = { navController?.navigate("CreditsScreen") }
-            )
-            Boton1(
-                modifier = Modifier.padding(bottom = 10.dp),
-                botonText = "salir" // Considera cómo manejarás el salir (ej. (context as Activity).finish())
-            )
+            
+            Spacer(modifier = Modifier.weight(0.1f))
+            
+            // Botones del menú
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Boton1(
+                    modifier = Modifier.fillMaxWidth(),
+                    botonText = "Jugar",
+                    onClick = { navController?.navigate("DifficultyScreen") }
+                )
+                
+                Boton1(
+                    modifier = Modifier.fillMaxWidth(),
+                    botonText = "Estadísticas",
+                    onClick = { navController?.navigate("StatisticsScreen") }
+                )
+                
+                Boton1(
+                    modifier = Modifier.fillMaxWidth(),
+                    botonText = "Créditos",
+                    onClick = { navController?.navigate("CreditsScreen") }
+                )
+                
+                Boton1(
+                    modifier = Modifier.fillMaxWidth(),
+                    botonText = "Salir",
+                    onClick = { /* Implementar lógica de salida */ }
+                )
+            }
+            
+            Spacer(modifier = Modifier.weight(0.1f))
         }
     }
 }
@@ -78,6 +94,6 @@ fun Home(
 @Composable
 fun HomePreview() {
     BuscaminasTheme(dynamicColor = false) {
-        Home(modifier = Modifier)
+        Home()
     }
 }

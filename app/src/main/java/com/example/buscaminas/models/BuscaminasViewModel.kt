@@ -155,6 +155,16 @@ class BuscaminasViewModel(application: Application) : AndroidViewModel(applicati
                 minasRestantes = stats.minasRestantes,
                 celdasDestapadas = stats.celdasDestapadas
             )
+            // Lógica de victoria automática
+            val totalCeldasSinMinas = stats.totalCeldas - stats.totalMinas
+            if (stats.minasRestantes == 0 && stats.celdasDestapadas == totalCeldasSinMinas && !_gameState.value.juegoTerminado) {
+                // Marca el juego como ganado
+                _gameState.value = _gameState.value.copy(
+                    juegoTerminado = true,
+                    juegoGanado = true
+                )
+                stopTimer()
+            }
         }
     }
 
@@ -184,6 +194,11 @@ class BuscaminasViewModel(application: Application) : AndroidViewModel(applicati
             celdasDestapadas = 0
         )
     }
+
+    fun obtenerGameStats(): GameStats? {
+        return tableroJuego?.obtenerEstadisticas()
+    }
+
     private fun startTimer() {
         // Asegúrate de que solo haya un timerJob activo
         timerJob?.cancel()

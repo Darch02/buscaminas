@@ -31,7 +31,10 @@ import androidx.navigation.NavController
 import com.example.buscaminas.R
 import com.example.buscaminas.models.*
 import com.example.buscaminas.models.Celda
+import com.example.buscaminas.models.GameStats
 import com.example.buscaminas.screens.ExplosionAnimation
+import com.example.buscaminas.screens.PauseButton
+import com.example.buscaminas.screens.PauseScreen
 
 @Composable
 fun BuscaminasGameScreen(
@@ -41,51 +44,89 @@ fun BuscaminasGameScreen(
 ) {
     val gameState by viewModel.gameState.collectAsState()
     val tablero by viewModel.tablero.collectAsState()
+    var showPauseScreen by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         if (!gameState.juegoIniciado) {
             viewModel.iniciarJuego(nivel)
         }
     }
-    Surface(
-        modifier = Modifier.fillMaxSize(), // Crucial para que ocupe toda la pantalla
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            // Barra de información del juego
-            GameInfoBar(
-                gameState = gameState
-            )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Tablero del juego
-            Log.d("BuscaminasGameScreen", "Valor actual de tablero: ${tablero}")
-            if (tablero == null) {
-                Text("Cargando tablero...", color = Color.Gray) // Mensaje de carga
+    LaunchedEffect(gameState.juegoTerminado) {
+        if (gameState.juegoTerminado && !gameState.juegoGanado) {
+            val stats = viewModel.obtenerGameStats()
+            stats?.let {
+                navController?.navigate("LoseScreen/${it.celdasDestapadas}/${it.totalCeldas}/${it.minasRestantes}/${it.totalMinas}")
             }
-            // Tablero del juego
-            tablero?.let { board ->
-                Log.d("BuscaminasGameScreen", "GameBoard se está componiendo con tablero: Filas=${board.size}, Columnas=${board[0].size}")
-                GameBoard(
-                    tablero = board,
-                    gameState = gameState,
-                    onCellClick = { fila, columna ->
-                        viewModel.destaparCelda(fila, columna)
-                    },
-                    onCellLongClick = { fila, columna ->
-                        viewModel.alternarBandera(fila, columna)
-                    },
-                    viewModel = viewModel
-                )
+        } else if (gameState.juegoTerminado && gameState.juegoGanado) {
+            val stats = viewModel.obtenerGameStats()
+            stats?.let {
+                navController?.navigate("WinScreen/${it.celdasDestapadas}/${it.totalCeldas}/${it.minasRestantes}/${it.totalMinas}")
             }
         }
     }
 
+    if (showPauseScreen) {
+        PauseScreen(
+            navController = navController,
+            onResume = { showPauseScreen = false }
+        )
+    } else {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
+                // Barra superior con temporizador y botón de pausa
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Temporizador
+                    Text(
+                        text = formatTime(gameState.tiempoTranscurrido),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    // Botón de pausa
+                    PauseButton(
+                        onClick = { showPauseScreen = true }
+                    )
+                }
+
+                // Barra de información del juego
+                GameInfoBar(
+                    gameState = gameState
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Tablero del juego
+                tablero?.let { board ->
+                    GameBoard(
+                        tablero = board,
+                        gameState = gameState,
+                        onCellClick = { fila, columna ->
+                            viewModel.destaparCelda(fila, columna)
+                        },
+                        onCellLongClick = { fila, columna ->
+                            viewModel.alternarBandera(fila, columna)
+                        },
+                        viewModel = viewModel
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -110,15 +151,13 @@ fun GameInfoBar(
             fontWeight = FontWeight.Bold,
             color = Color.Black
         )
-
-        // Timer (simplificado - podrías implementar un timer real)
-        Text(
-            text = String.format("%03d", gameState.tiempoTranscurrido),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
     }
+}
+
+private fun formatTime(seconds: Long): String {
+    val minutes = seconds / 60
+    val remainingSeconds = seconds % 60
+    return String.format("%02d:%02d", minutes, remainingSeconds)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
