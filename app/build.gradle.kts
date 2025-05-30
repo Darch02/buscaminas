@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.buscaminas"
+    namespace = "com.buscaminas.buscaminas"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.buscaminas"
+        applicationId = "com.buscaminas.buscaminas"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
