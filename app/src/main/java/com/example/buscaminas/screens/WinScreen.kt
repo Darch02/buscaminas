@@ -137,7 +137,7 @@ fun WinScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    botonText = "Volver al Menú Principal",
+                    botonText = "Menú Principal",
                     onClick = {
                         navController?.navigate("HomeScreen") {
                             popUpTo("HomeScreen") { inclusive = true }

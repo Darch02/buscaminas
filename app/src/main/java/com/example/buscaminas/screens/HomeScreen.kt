@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.buscaminas.R
 import com.example.buscaminas.ui.theme.BuscaminasTheme
+import androidx.compose.ui.platform.LocalContext
+import android.app.Activity
 
 @Composable
 fun Home(
@@ -25,6 +27,8 @@ fun Home(
     Scaffold(
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
+        val context = LocalContext.current
+        val activity = context as? Activity
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -81,7 +85,7 @@ fun Home(
                 Boton1(
                     modifier = Modifier.fillMaxWidth(),
                     botonText = "Salir",
-                    onClick = { /* Implementar lógica de salida */ }
+                    onClick = { activity?.finish() }
                 )
             }
             
